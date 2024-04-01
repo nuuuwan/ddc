@@ -1,0 +1,2 @@
+class DDC:
+    pass

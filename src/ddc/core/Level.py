@@ -13,10 +13,14 @@ class Level:
     name: str
     children: list['Level']
 
-    def __str__(self):
+    @property
+    def str_self_only(self) -> str:
         tabs = '  ' * self.level
+        return f'{tabs}* {self.code} {self.name}'
+
+    def __str__(self):
         return (
-            f'{tabs}* {self.code} {self.name}'
+            self.str_self_only
             + '\n'
             + ''.join([str(child) for child in self.children])
         )
@@ -28,3 +32,14 @@ class Level:
         File(md_path).write_lines(lines)
         log.info(f'Wrote {md_path}')
         os.startfile(md_path)
+
+    def search(self, search_phrase):
+        if any(
+            [
+                search_phrase.lower() in self.name.lower(),
+                search_phrase.lower() == self.code.lower(),
+            ]
+        ):
+            print(self)
+        for child in self.children:
+            child.search(search_phrase)
